@@ -1,12 +1,23 @@
-import { OrbitControls, MeshReflectorMaterial } from '@react-three/drei'
-import {useControls} from 'leva'
-import { degToRad } from 'three/src/math/MathUtils.js'
+import { OrbitControls } from '@react-three/drei'
+
+const TABLE_BOX_SIZE = 10
+const CUBE_SIZE = 0.5
+
+type Position = [number, number, number]
+type Cube = {
+  position: Position
+}
 
 export default function MyElement3D() {
-  const {rotateX, rotateY, rotateZ} = useControls({
-    rotateX: { value: -90, min: -180, max: 180, step: 45 },
-    rotateY: { value: 0, min: -180, max: 180, step: 45 },
-    rotateZ: { value: 0, min: -180, max: 180, step: 45 },
+  const cubes: {
+    position: Position
+  }[] = Array.from({ length: 10 * 10 * 10}).map((_, i) => {
+    const x = i % 10
+    const y = Math.floor(i / 10) % 10
+    const z = Math.floor(i / 100)
+    return {
+      position: [x * CUBE_SIZE, y * CUBE_SIZE, z * CUBE_SIZE]
+    }
   })
 
   return (
@@ -17,30 +28,34 @@ export default function MyElement3D() {
       <directionalLight position={[1,2,8]} intensity={0.7} />
       <ambientLight intensity={0.2} />
 
-      <axesHelper scale={10} /> {/* world 좌표계 */}
+      <axesHelper scale={10} />
 
-      <mesh position={[0,-0.6,0]} rotation={[degToRad(rotateX), degToRad(rotateY), degToRad(rotateZ)]}>
-        <planeGeometry args={[10,10]} />
-        <MeshReflectorMaterial
-          // https://github.com/pmndrs/drei?tab=readme-ov-file#meshreflectormaterial
-          // 모든 메시에 반사 및/또는 블러를 쉽게 추가할 수 있습니다. 보다 사실적인 효과를 위해 표면 거칠기를 고려합니다. 이 머티리얼은 THREE.MeshStandardMaterial에서 확장되며 모든 소품을 수용합니다.
-          blur={[300,100]}
-          resolution={2048}
-          mixBlur={1}
-          mixStrength={30}
-          roughness={1}
-          depthScale={0.7}
-          maxDepthThreshold={1.4}
-          color="#050505"
-          mirror={0.5}
-          metalness={0.5}
-        />
-      </mesh>
 
-      <mesh position={[0,0,0]}>
-        <boxGeometry />
-        <meshStandardMaterial color="cyan" />
-      </mesh>
+      <group position={[-TABLE_BOX_SIZE/4,0, -TABLE_BOX_SIZE/4]}>
+        {cubes.map(cube =>
+          <Cube position={cube.position} />
+        )}
+      </group>
+
+      <TableBox />
     </>
+  )
+}
+
+function TableBox () {
+  return (
+    <mesh position={[0,-TABLE_BOX_SIZE/2,0]}>
+      <boxGeometry args={[TABLE_BOX_SIZE, TABLE_BOX_SIZE, TABLE_BOX_SIZE]} />
+      <meshStandardMaterial color="#eee" />
+    </mesh>
+  )
+}
+
+function Cube ({ position }: { position: Position }) {
+  return (
+    <mesh position={position}>
+      <boxGeometry args={[CUBE_SIZE, CUBE_SIZE, CUBE_SIZE]} />
+      <meshStandardMaterial color="cyan" />
+    </mesh>
   )
 }
