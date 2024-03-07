@@ -30,9 +30,9 @@ export default function MyElement3D() {
           mixStrength={30}
           roughness={1}
           depthScale={0.7}
-          mixDepthThreshold={0.4}
           maxDepthThreshold={1.4}
           color="#050505"
+          mirror={0.5}
           metalness={0.5}
         />
       </mesh>
