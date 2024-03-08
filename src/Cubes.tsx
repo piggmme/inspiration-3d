@@ -8,8 +8,8 @@ import { RoundedBoxGeometry } from 'three/examples/jsm/Addons.js';
 import * as THREE from 'three';
 import { Position } from './r3fType';
 
-const MAX_COUNT = 2000;
-const COL_COUNT = 5;
+const COL_COUNT = 9;
+const TOTAL_COUNT = COL_COUNT * COL_COUNT * COL_COUNT
 const CUBE_SIZE = 0.5;
 const SIZE = COL_COUNT * CUBE_SIZE;
 
@@ -23,7 +23,7 @@ export const Cubes = ({
   const cubes = useMemo<InstancedRigidBodyProps[]>(
     () =>
       Array.from({
-        length: COL_COUNT * COL_COUNT * COL_COUNT,
+        length: TOTAL_COUNT,
       }).map((_, i) => {
         const x = i % COL_COUNT;
         const y = Math.floor(i / COL_COUNT) % COL_COUNT;
@@ -31,6 +31,8 @@ export const Cubes = ({
         return {
           key: i,
           position: [x * CUBE_SIZE, y * CUBE_SIZE, z * CUBE_SIZE],
+          // 메쉬가 너무 붙어있으면 물리엔진 계산이 과부화 될 수 있어서 조금 떨어뜨림
+          scale: 0.9,
         };
       }),
     [],
@@ -45,15 +47,18 @@ export const Cubes = ({
           args={[
             new RoundedBoxGeometry(CUBE_SIZE, CUBE_SIZE, CUBE_SIZE),
             undefined,
-            MAX_COUNT,
+            TOTAL_COUNT,
           ]}
           count={cubes.length}
           onClick={evt => {
-            api.current![evt.instanceId!].applyTorqueImpulse(
+            console.log('click', evt.instanceId);
+            if(!api.current || !evt.instanceId || !api.current![evt.instanceId!]) return;
+            console.log('push')
+            api.current![evt.instanceId!].applyImpulse(
               {
-                x: 0,
-                y: 50,
-                z: 0,
+                x: 0.4,
+                y: 0.7,
+                z: 0.5,
               },
               true,
             );
