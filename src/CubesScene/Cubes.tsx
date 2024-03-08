@@ -6,7 +6,7 @@ import {
 import { useMemo, useRef } from 'react';
 import { RoundedBoxGeometry } from 'three/examples/jsm/Addons.js';
 import * as THREE from 'three';
-import { Position } from './r3fType';
+import { Position } from '../r3fType';
 
 const COL_COUNT = 9;
 const TOTAL_COUNT = COL_COUNT * COL_COUNT * COL_COUNT

@@ -6,7 +6,7 @@ import { useThree } from '@react-three/fiber';
 
 const TABLE_BOX_SIZE = 10;
 
-export default function MyElement3D() {
+export default function Meshes() {
   useThree(({ camera }) => {
     camera.rotation.set(THREE.MathUtils.degToRad(15), 0, 0);
   });

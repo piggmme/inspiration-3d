@@ -1,11 +1,10 @@
-import './App.css';
 import { Canvas } from '@react-three/fiber';
-import MyElement3D from './MyElement3D';
+import Meshes from './Meshes';
 import { Suspense } from 'react';
 import { Environment, OrbitControls } from '@react-three/drei';
 import { Physics } from '@react-three/rapier';
 
-function App() {
+export default function CubesScene() {
   return (
     <>
       <Canvas
@@ -34,12 +33,10 @@ function App() {
             <Environment preset="dawn" />
             {/* <axesHelper scale={10} /> */}
 
-            <MyElement3D />
+            <Meshes />
           </Physics>
         </Suspense>
       </Canvas>
     </>
   );
 }
-
-export default App;
