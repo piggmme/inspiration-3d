@@ -74,8 +74,8 @@ export const Cubes = ({
             // rendering
             side={THREE.DoubleSide} // 양면
             wireframe={false}
-            color="#deaaff"
-            emissive="#deaaff" // 매쉬가 내는 빛. 기본값은 블랙
+            color="#eca3f9"
+            emissive="#000" // 매쉬가 내는 빛. 기본값은 블랙
             roughness={0} // 거칠기
             metalness={0} // 금속감
             clearcoat={0.35} // 코팅
