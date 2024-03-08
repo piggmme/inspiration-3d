@@ -32,7 +32,7 @@ function App() {
             />
 
             <Environment preset="dawn" />
-            <axesHelper scale={10} />
+            {/* <axesHelper scale={10} /> */}
 
             <MyElement3D />
           </Physics>
