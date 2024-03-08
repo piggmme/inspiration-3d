@@ -13,9 +13,42 @@ export default function MyElement3D() {
 
   return (
     <>
+      <BigBall />
       <Cubes />
       <FloorBox />
     </>
+  );
+}
+
+function BigBall () {
+  return (
+    <RigidBody type="dynamic" colliders="ball">
+      <mesh position={[0, 20, 0]}>
+        <sphereGeometry args={[1.6, 32, 32]} />
+        <meshPhysicalMaterial
+          visible={true}
+          transparent={true}
+          opacity={1}
+          // depth buffer
+          depthTest={true}
+          depthWrite={true}
+          // rendering
+          side={THREE.DoubleSide} // 양면
+          wireframe={false}
+          color="#fff"
+          emissive="#f3c4fb" // 매쉬가 내는 빛. 기본값은 블랙
+          roughness={0} // 거칠기
+          metalness={0} // 금속감
+          clearcoat={0.35} // 코팅
+          clearcoatRoughness={0}
+          flatShading={false} // 평면 쉐이딩. 기본값은 false
+          // 유리 관련 속성값
+          transmission={0.8} // 투명도. 기본값은 0
+          thickness={0.5} // 유리의 두께
+          ior={1.5} // 굴절률
+        />
+      </mesh>
+    </RigidBody>
   );
 }
 
