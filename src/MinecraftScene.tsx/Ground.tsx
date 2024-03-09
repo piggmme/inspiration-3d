@@ -16,7 +16,7 @@ export function Ground() {
         rotation={[-Math.PI / 2, 0, 0]}
         position={[0, 0, 0]}
       >
-        <meshBasicMaterial map={texture} map-repeat={[250, 250]} />
+        <meshBasicMaterial map={texture} map-repeat={[1000, 1000]} />
       </Plane>
       <CuboidCollider args={[1000, 2, 1000]} position={[0, -2, 0]} />
     </RigidBody>

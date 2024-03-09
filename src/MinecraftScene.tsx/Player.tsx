@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useKeyboardControls } from '@react-three/drei';
 import { CapsuleCollider, RigidBody, useRapier } from '@react-three/rapier';
-import Axe from './Axe';
+import Tool from './Tool';
 
 const SPEED = 5;
 const direction = new THREE.Vector3();
@@ -25,7 +25,7 @@ const getVectorFromBoolean = (b1: boolean, b2: boolean) => {
 };
 
 export function Player({ lerp = THREE.MathUtils.lerp }) {
-  const axeRef = useRef<THREE.Group<THREE.Object3DEventMap>>(null);
+  const toolRef = useRef<THREE.Group<THREE.Object3DEventMap>>(null);
   const rigidBodyRef = useRef<RAPIER.RigidBody>(null);
   const rapier = useRapier();
   const [, getKeyboard] = useKeyboardControls();
@@ -78,22 +78,22 @@ export function Player({ lerp = THREE.MathUtils.lerp }) {
       rigidBodyRef.current.setLinvel({ x: 0, y: 5.5, z: 0 }, true);
   });
 
-  // 도끼
+  // 도구: 도끼, 망치
   useFrame(state => {
-    if (!rigidBodyRef?.current || !axeRef.current?.children[0]) return;
+    if (!rigidBodyRef?.current || !toolRef.current?.children[0]) return;
     const velocity = rigidBodyRef.current.linvel();
     const isMoving =
       Math.sqrt(
         Math.abs(velocity.x) + Math.abs(velocity.y) + Math.abs(velocity.z),
       ) > 1;
 
-    axeRef.current.children[0].rotation.x = lerp(
-      axeRef.current.children[0].rotation.x,
+    toolRef.current.children[0].rotation.x = lerp(
+      toolRef.current.children[0].rotation.x,
       isMoving ? Math.sin(state.clock.elapsedTime * 10) / 6 : 0,
       0.1,
     );
-    axeRef.current.rotation.copy(state.camera.rotation);
-    axeRef.current.position
+    toolRef.current.rotation.copy(state.camera.rotation);
+    toolRef.current.position
       .copy(state.camera.position)
       .add(state.camera.getWorldDirection(rotation).multiplyScalar(1));
   });
@@ -111,13 +111,13 @@ export function Player({ lerp = THREE.MathUtils.lerp }) {
         <CapsuleCollider args={[0.75, 0.5]} />
       </RigidBody>
       <group
-        ref={axeRef}
+        ref={toolRef}
         onPointerMissed={() => {
-          if (!axeRef.current || !axeRef.current.children[0]) return;
-          axeRef.current.children[0].rotation.x = -0.8;
+          if (!toolRef.current || !toolRef.current.children[0]) return;
+          toolRef.current.children[0].rotation.x = -0.8;
         }}
       >
-        <Axe position={[0.4, -0.2, 0.3]} />
+        <Tool type="axe" />
       </group>
     </>
   );

@@ -16,6 +16,7 @@ export default function MinecraftScene() {
         { name: 'left', keys: ['ArrowLeft', 'a', 'A', 'ㅁ'] },
         { name: 'right', keys: ['ArrowRight', 'd', 'D', 'ㅇ'] },
         { name: 'jump', keys: ['Space'] },
+        { name: 'axe', keys: ['f', 'F', 'ㄹ'] },
       ]}
     >
       <Canvas shadows camera={{ fov: 45 }}>
