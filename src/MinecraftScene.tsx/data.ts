@@ -9,8 +9,8 @@ export type Tool = {
 
 export const AXE_DATA: Tool = {
   rotation: [-Math.PI / 8, -Math.PI / 2, 0],
-  scale: 0.5,
-  position: [0.4, -0.35, 0.3],
+  scale: 0.7,
+  position: [0.4, -0.55, 0.3],
 };
 
 export const PICK_DATA: Tool = {
