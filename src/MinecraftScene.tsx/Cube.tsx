@@ -4,29 +4,23 @@ import { RigidBody } from '@react-three/rapier';
 import dirt from './assets/dirt.jpg';
 import { Position } from '../r3fType';
 import * as RAPIER from '@dimforge/rapier3d-compat';
-
-const CUBE_SIZE = 1;
+import { CUBE_SIZE, useCubesStore } from './store/useCubesStore';
 
 type CubeProps = {
   position: Position;
-  addCube?: (position: Position) => void;
 };
 
 export const Cubes = () => {
-  const [cubes, setCubes] = useState<Position[]>([[0, CUBE_SIZE / 2, -10]]);
-  const addCube = (position: Position) => {
-    setCubes(cubes => [...cubes, position]);
-  };
+  const cubes = useCubesStore(state => state.cubes);
 
-  return cubes.map((coords, index) => (
-    <Cube key={index} position={coords} addCube={addCube} />
-  ));
+  return cubes.map((coords, index) => <Cube key={index} position={coords} />);
 };
 
-export function Cube({ position, addCube }: CubeProps) {
+export function Cube({ position }: CubeProps) {
   const cubeRef = useRef<RAPIER.RigidBody>(null);
   const texture = useTexture(dirt);
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
+  const addCube = useCubesStore(state => state.addCube);
 
   const getDirection = (faceIndex: number) => {
     if (!cubeRef.current) return;
