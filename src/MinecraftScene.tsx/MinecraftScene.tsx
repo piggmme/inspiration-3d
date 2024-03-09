@@ -5,6 +5,7 @@ import { Physics } from '@react-three/rapier';
 import { Cubes } from './Cube';
 import { Ground } from './Ground';
 import { Player } from './Player';
+import Dot from './Dot';
 
 export default function MinecraftScene() {
   return (
@@ -27,10 +28,10 @@ export default function MinecraftScene() {
             <Player />
             <Ground />
           </Suspense>
-          <axesHelper scale={10} />
         </Physics>
         <PointerLockControls />
       </Canvas>
+      <Dot />
     </KeyboardControls>
   );
 }
