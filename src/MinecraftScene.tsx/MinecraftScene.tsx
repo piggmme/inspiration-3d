@@ -6,17 +6,18 @@ import { Cubes } from './Cube';
 import { Ground } from './Ground';
 import { Player } from './Player';
 import Dot from './Dot';
+import { Controls } from '../r3fType';
 
 export default function MinecraftScene() {
   return (
     <KeyboardControls
       map={[
-        { name: 'forward', keys: ['ArrowUp', 'w', 'W', 'ㅈ'] },
-        { name: 'backward', keys: ['ArrowDown', 's', 'S', 'ㄴ'] },
-        { name: 'left', keys: ['ArrowLeft', 'a', 'A', 'ㅁ'] },
-        { name: 'right', keys: ['ArrowRight', 'd', 'D', 'ㅇ'] },
-        { name: 'jump', keys: ['Space'] },
-        { name: 'axe', keys: ['f', 'F', 'ㄹ'] },
+        { name: Controls.forward, keys: ['ArrowUp', 'w', 'W', 'ㅈ'] },
+        { name: Controls.backward, keys: ['ArrowDown', 's', 'S', 'ㄴ'] },
+        { name: Controls.left, keys: ['ArrowLeft', 'a', 'A', 'ㅁ'] },
+        { name: Controls.right, keys: ['ArrowRight', 'd', 'D', 'ㅇ'] },
+        { name: Controls.jump, keys: ['Space'] },
+        { name: Controls.changeTool, keys: ['f', 'F', 'ㄹ'] },
       ]}
     >
       <Canvas shadows camera={{ fov: 45 }}>

@@ -1,10 +1,12 @@
 import * as THREE from 'three';
 import * as RAPIER from '@dimforge/rapier3d-compat';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { useKeyboardControls } from '@react-three/drei';
 import { CapsuleCollider, RigidBody, useRapier } from '@react-three/rapier';
 import Tool from './Tool';
+import { useToolStore } from './store/useToolStore';
+import { useKeyboardControls } from '@react-three/drei';
+import { Controls } from '../r3fType';
 
 const SPEED = 5;
 const direction = new THREE.Vector3();
@@ -25,10 +27,7 @@ const getVectorFromBoolean = (b1: boolean, b2: boolean) => {
 };
 
 export function Player({ lerp = THREE.MathUtils.lerp }) {
-  const toolRef = useRef<THREE.Group<THREE.Object3DEventMap>>(null);
   const rigidBodyRef = useRef<RAPIER.RigidBody>(null);
-  const rapier = useRapier();
-  const [, getKeyboard] = useKeyboardControls();
 
   // 카메라 설정
   useFrame(state => {
@@ -39,6 +38,7 @@ export function Player({ lerp = THREE.MathUtils.lerp }) {
   });
 
   // 플레이어 이동
+  const [, getKeyboard] = useKeyboardControls<Controls>();
   useFrame(state => {
     if (!rigidBodyRef.current) return;
 
@@ -63,6 +63,7 @@ export function Player({ lerp = THREE.MathUtils.lerp }) {
   });
 
   //  점프
+  const rapier = useRapier();
   useFrame(() => {
     if (!rigidBodyRef.current) return;
     const { jump } = getKeyboard();
@@ -78,7 +79,17 @@ export function Player({ lerp = THREE.MathUtils.lerp }) {
       rigidBodyRef.current.setLinvel({ x: 0, y: 5.5, z: 0 }, true);
   });
 
-  // 도구: 도끼, 망치
+  // 도구 바꾸기
+  const changeTool = useKeyboardControls<Controls>(state => state.changeTool);
+  const toolMode = useToolStore(state => state.mode);
+  const toggleMode = useToolStore(state => state.toggleMode);
+  const toolRef = useRef<THREE.Group<THREE.Object3DEventMap>>(null);
+
+  useEffect(() => {
+    changeTool && toggleMode();
+  }, [changeTool]);
+
+  // 도구 애니메이션
   useFrame(state => {
     if (!rigidBodyRef?.current || !toolRef.current?.children[0]) return;
     const velocity = rigidBodyRef.current.linvel();
@@ -117,7 +128,7 @@ export function Player({ lerp = THREE.MathUtils.lerp }) {
           toolRef.current.children[0].rotation.x = -0.8;
         }}
       >
-        <Tool type="axe" />
+        <Tool type={toolMode} />
       </group>
     </>
   );
