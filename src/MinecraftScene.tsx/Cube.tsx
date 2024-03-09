@@ -5,13 +5,15 @@ import dirt from './assets/dirt.jpg';
 import { Position } from '../r3fType';
 import * as RAPIER from '@dimforge/rapier3d-compat';
 
+const CUBE_SIZE = 1;
+
 type CubeProps = {
   position: Position;
   addCube?: (position: Position) => void;
 };
 
 export const Cubes = () => {
-  const [cubes, setCubes] = useState<Position[]>([[0, 0.5, -10]]);
+  const [cubes, setCubes] = useState<Position[]>([[0, CUBE_SIZE / 2, -10]]);
   const addCube = (position: Position) => {
     setCubes(cubes => [...cubes, position]);
   };
@@ -72,7 +74,7 @@ export function Cube({ position, addCube }: CubeProps) {
             color={hoverIdx === index ? 'hotpink' : 'white'}
           />
         ))}
-        <boxGeometry />
+        <boxGeometry args={[CUBE_SIZE, CUBE_SIZE, CUBE_SIZE]} />
       </mesh>
     </RigidBody>
   );
