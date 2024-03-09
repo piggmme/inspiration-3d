@@ -2,7 +2,7 @@ import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react';
 import { KeyboardControls, PointerLockControls, Sky } from '@react-three/drei';
 import { Physics } from '@react-three/rapier';
-import { Cube } from './Cube';
+import { Cubes } from './Cube';
 import { Ground } from './Ground';
 import { Player } from './Player';
 
@@ -23,7 +23,7 @@ export default function MinecraftScene() {
         <pointLight castShadow intensity={10} position={[30, 30, 30]} />
         <Physics gravity={[0, -30, 0]}>
           <Suspense>
-            <Cube position={[0, 0.5, -10]} />
+            <Cubes />
             <Player />
             <Ground />
           </Suspense>
