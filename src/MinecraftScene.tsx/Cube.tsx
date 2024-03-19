@@ -1,25 +1,33 @@
 import { useRef, useState } from 'react';
-import { useTexture } from '@react-three/drei';
+import { Edges, useTexture } from '@react-three/drei';
 import { RigidBody } from '@react-three/rapier';
-import dirt from './assets/dirt.jpg';
+import dirt from './assets/texture/dirt.png';
+import grass from './assets/texture/grass.png';
+import grassDirtSide from './assets/texture/grassDirtSide.png';
+import * as THREE from 'three';
 import { Position } from '../r3fType';
 import * as RAPIER from '@dimforge/rapier3d-compat';
 import { CUBE_SIZE, useCubesStore } from './store/useCubesStore';
 
+type TextureType = 'dirt' | 'grass' | 'grassDirt';
+
 type CubeProps = {
   position: Position;
+  type?: TextureType;
 };
 
 export const Cubes = () => {
   const cubes = useCubesStore(state => state.cubes);
-
   return cubes.map((coords, index) => <Cube key={index} position={coords} />);
 };
 
-export function Cube({ position }: CubeProps) {
+export function Cube({ position, type = 'grassDirt' }: CubeProps) {
   const cubeRef = useRef<RAPIER.RigidBody>(null);
-  const texture = useTexture(dirt);
-  const [hoverIdx, setHoverIdx] = useState<number | null>(null);
+
+  const { getTexture } = useTextures();
+  const textures = getTexture(type);
+
+  const [hovered, hover] = useState(false);
   const addCube = useCubesStore(state => state.addCube);
 
   const getDirection = (faceIndex: number) => {
@@ -46,30 +54,69 @@ export function Cube({ position }: CubeProps) {
       <mesh
         receiveShadow
         castShadow
-        onPointerOut={() => setHoverIdx(null)}
-        onPointerMove={e => {
-          if (!e.faceIndex) return;
+        onPointerOver={e => {
           e.stopPropagation();
-          setHoverIdx(Math.floor(e.faceIndex / 2));
+          hover(true);
         }}
+        onPointerOut={() => hover(false)}
         onClick={e => {
           if (!e.faceIndex) return;
           e.stopPropagation();
           const dir = getDirection(e.faceIndex);
-          console.log('click', e.faceIndex, dir);
           if (dir) addCube?.(dir);
         }}
       >
-        {[...Array(6)].map((_, index) => (
+        {textures.map((texture, index) => (
           <meshStandardMaterial
             attach={`material-${index}`}
             key={index}
             map={texture}
-            color={hoverIdx === index ? 'hotpink' : 'white'}
           />
         ))}
+        <Edges
+          visible={hovered}
+          threshold={15}
+          color={'#000'}
+          renderOrder={hovered ? 1000 : 0}
+        />
         <boxGeometry args={[CUBE_SIZE, CUBE_SIZE, CUBE_SIZE]} />
       </mesh>
     </RigidBody>
   );
+}
+
+function useTextures() {
+  const dirtTexture = useTexture(dirt);
+  dirtTexture.magFilter = THREE.NearestFilter;
+  const dirtTextures = Array(6).fill(dirtTexture);
+
+  const grassTexture = useTexture(grass);
+  grassTexture.magFilter = THREE.NearestFilter;
+  const grassTextures = Array(6).fill(grassTexture);
+
+  const grassDirtSideTexture = useTexture(grassDirtSide);
+  grassDirtSideTexture.magFilter = THREE.NearestFilter;
+  const grassDirtSideTextures = [
+    grassDirtSideTexture,
+    grassDirtSideTexture,
+    grassTexture,
+    dirtTexture,
+    grassDirtSideTexture,
+    grassDirtSideTexture,
+  ];
+
+  const getTexture = (texture: TextureType) => {
+    switch (texture) {
+      case 'dirt':
+        return dirtTextures;
+      case 'grass':
+        return grassTextures;
+      case 'grassDirt':
+        return grassDirtSideTextures;
+      default:
+        return dirtTextures;
+    }
+  };
+
+  return { getTexture, dirtTextures, grassTextures, grassDirtSideTextures };
 }
