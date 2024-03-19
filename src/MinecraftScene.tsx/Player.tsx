@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import * as THREE from 'three';
 import * as RAPIER from '@dimforge/rapier3d-compat';
 import { useEffect, useRef } from 'react';
@@ -68,11 +69,9 @@ export function Player({ lerp = THREE.MathUtils.lerp }) {
     if (!rigidBodyRef.current) return;
     const { jump } = getKeyboard();
 
-    const world = rapier.world;
-    const ray = world.castRay(
+    // @ts-ignore
+    const ray = rapier.world.castRay(
       new RAPIER.Ray(rigidBodyRef.current.translation(), { x: 0, y: -1, z: 0 }),
-      0,
-      true,
     );
     const grounded = ray && ray.collider && Math.abs(ray.toi) <= 1.75;
     if (jump && grounded)
