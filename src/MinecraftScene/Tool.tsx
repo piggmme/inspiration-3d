@@ -10,7 +10,7 @@ title: Minecraft Diamond Axe
 import { useGLTF } from '@react-three/drei';
 import pickUrl from './assets/pick.glb?url';
 import axeUrl from './assets/axe.glb?url';
-import { AXE_DATA, PICK_DATA, ToolType } from './data';
+import { AXE_DATA, PICK_DATA, ToolType } from './data/data';
 
 export default function Tool({ type = 'pick' }: { type: ToolType }) {
   const { scene: pickScene } = useGLTF(pickUrl);

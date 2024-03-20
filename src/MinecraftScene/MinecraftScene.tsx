@@ -3,7 +3,6 @@ import { Suspense } from 'react';
 import { KeyboardControls, PointerLockControls, Sky } from '@react-three/drei';
 import { Physics } from '@react-three/rapier';
 import { Cubes } from './Cube';
-import { Ground } from './Ground';
 import { Player } from './Player';
 import Dot from './Dot';
 import { Controls } from '../r3fType';
@@ -28,7 +27,6 @@ export default function MinecraftScene() {
           <Suspense>
             <Cubes />
             <Player />
-            <Ground />
           </Suspense>
         </Physics>
         <PointerLockControls />

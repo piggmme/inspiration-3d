@@ -1,7 +1,5 @@
 import { create } from 'zustand';
-import { ToolType } from '../data';
-
-export const CUBE_SIZE = 1;
+import { ToolType } from '../data/data';
 
 type ToolStore = {
   mode: ToolType;

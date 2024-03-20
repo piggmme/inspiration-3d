@@ -1,4 +1,4 @@
-import { Position, Rotation } from '../r3fType';
+import { Position, Rotation } from '../../r3fType';
 
 export type ToolType = 'axe' | 'pick';
 export type Tool = {

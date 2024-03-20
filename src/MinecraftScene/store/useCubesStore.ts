@@ -1,14 +1,30 @@
 import { create } from 'zustand';
 import { Position } from '../../r3fType';
+import { grassDirtCube, groundCubes } from '../data/cubes';
+import { v4 as uuidv4 } from 'uuid';
 
-export const CUBE_SIZE = 1;
+export type TextureType = 'dirt' | 'grass' | 'grassDirt';
+
+export type CubeDto = {
+  position: Position;
+  type: TextureType;
+  id: string;
+}
 
 type CubesStore = {
-  cubes: Position[];
-  addCube: (cube: Position) => void;
+  cubes: CubeDto[];
+  addCube: (cube: Omit<CubeDto, "id">) => void;
+  addCubes: (cubes: Omit<CubeDto, "id">[]) => void;
 };
 
+const initialCubes: CubeDto[] = [grassDirtCube, ...groundCubes]
+
 export const useCubesStore = create<CubesStore>(set => ({
-  cubes: [[0, CUBE_SIZE / 2, -10]],
-  addCube: cube => set(state => ({ cubes: [...state.cubes, cube] })),
+  cubes: initialCubes,
+  addCube: cube => set(state => ({ cubes: [...state.cubes, {...cube, id: uuidv4()}] })),
+  addCubes: newCubes => set(state => ({ cubes: [
+    ...state.cubes,
+    ...newCubes.map(cube => ({...cube, id: uuidv4()}))
+    ]
+  })),
 }));

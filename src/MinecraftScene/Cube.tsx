@@ -7,28 +7,29 @@ import grassDirtSide from './assets/texture/grassDirtSide.png';
 import * as THREE from 'three';
 import { Position } from '../r3fType';
 import * as RAPIER from '@dimforge/rapier3d-compat';
-import { CUBE_SIZE, useCubesStore } from './store/useCubesStore';
-
-type TextureType = 'dirt' | 'grass' | 'grassDirt';
+import { CubeDto, TextureType, useCubesStore } from './store/useCubesStore';
+import { CUBE_SIZE } from './data/cubes';
 
 type CubeProps = {
   position: Position;
   type?: TextureType;
+  addCube: (cube: Omit<CubeDto, "id">) => void;
 };
 
 export const Cubes = () => {
   const cubes = useCubesStore(state => state.cubes);
-  return cubes.map((coords, index) => <Cube key={index} position={coords} />);
+  const addCube = useCubesStore(state => state.addCube);
+
+  return cubes.map(({position, type, id}) => <Cube key={id} type={type} position={position} addCube={addCube} />);
 };
 
-export function Cube({ position, type = 'grassDirt' }: CubeProps) {
+export function Cube({ position, type = 'grassDirt', addCube }: CubeProps) {
   const cubeRef = useRef<RAPIER.RigidBody>(null);
 
   const { getTexture } = useTextures();
   const textures = getTexture(type);
 
   const [hovered, hover] = useState(false);
-  const addCube = useCubesStore(state => state.addCube);
 
   const getDirection = (faceIndex: number) => {
     if (!cubeRef.current) return;
@@ -63,7 +64,7 @@ export function Cube({ position, type = 'grassDirt' }: CubeProps) {
           if (!e.faceIndex) return;
           e.stopPropagation();
           const dir = getDirection(e.faceIndex);
-          if (dir) addCube?.(dir);
+          if (dir) addCube?.({ position: dir, type });
         }}
       >
         {textures.map((texture, index) => (
