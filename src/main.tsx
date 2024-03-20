@@ -14,7 +14,8 @@ import MinecraftScene from './MinecraftScene/MinecraftScene';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Root />}>
-      <Route index element={<CubesScene />} />
+      <Route index element={<MinecraftScene />} />
+      <Route path="cube" element={<CubesScene />} />
       <Route path="minecraft" element={<MinecraftScene />} />
     </Route>,
   ),
