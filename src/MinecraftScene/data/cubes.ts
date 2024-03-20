@@ -1,3 +1,4 @@
+import { Position } from "../../r3fType";
 import { CubeDto } from "../store/useCubesStore";
 import { v4 as uuidv4 } from 'uuid';
 
