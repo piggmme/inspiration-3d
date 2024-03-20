@@ -9,7 +9,7 @@ import {
 } from 'react-router-dom';
 import CubesScene from './CubesScene/CubesScene';
 import Root from './Root';
-import MinecraftScene from './MinecraftScene.tsx/MinecraftScene';
+import MinecraftScene from './MinecraftScene/MinecraftScene';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
